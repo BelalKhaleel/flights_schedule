@@ -45,9 +45,16 @@ class FlightController extends Controller
     /**
      * Display the specified flight.
      */
-    public function show(string $id)
+    public function show(string $flight_number)
     {
-        //
+        $flight = Flight::where('flight_number', $flight_number)->first();
+
+        if(!$flight) {
+            return response(['success' => false, 'message' => 'flight not found!', 404]);
+        }
+
+        $flight->load('passengers');
+        return response(['success' => true, 'flight' => $flight]);
     }
 
     /**
