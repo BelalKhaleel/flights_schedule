@@ -20,8 +20,8 @@ class FlightFactory extends Factory
             'flight_number' => fake()->randomNumber(4, true),
             'departure_city' => fake()->city(),
             'arrival_city' => fake()->city(),
-            'departure_time' => fake()->time(),
-            'arrival_time' => fake()->time(),
+            'departure_time' => fake()->dateTimeBetween('-1 year', '+1 year')->format('Y-m-d H:i:s'),
+            'arrival_time' => fake()->dateTimeBetween('-1 year', '+1 year')->format('Y-m-d H:i:s'),
         ];
     }
 }

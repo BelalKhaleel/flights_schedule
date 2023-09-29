@@ -16,8 +16,8 @@ return new class extends Migration
             $table->integer('flight_number');
             $table->string('departure_city');
             $table->string('arrival_city');
-            $table->time('departure_time')->nullable();
-            $table->time('arrival_time')->nullable();
+            $table->dateTime('departure_time')->nullable();
+            $table->dateTime('arrival_time')->nullable();
             $table->timestamps();
         });
     }

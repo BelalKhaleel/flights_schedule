@@ -44,8 +44,8 @@ class FlightController extends Controller
             'flight_number' => 'required|numeric|max_digits:4',
             'departure_city' => 'required|string|min:1|max:85',
             'arrival_city' => 'required|string|min:1|max:85',
-            'departure_time' => 'required|date_format:H:i:s',
-            'arrival_time' => 'required|date_format:H:i:s',
+            'departure_time' => 'required|date_format:Y-m-d H:i:s',
+            'arrival_time' => 'required|date_format:Y-m-d H:i:s',
         ]);
 
         $flight = Flight::create($data);
@@ -63,7 +63,7 @@ class FlightController extends Controller
     {
         $flight = Flight::where('flight_number', $flight_number)->first();
 
-        if(!$flight) {
+        if (!$flight) {
             return response(['success' => false, 'message' => 'flight not found!', 404]);
         }
 
@@ -90,8 +90,8 @@ class FlightController extends Controller
             'flight_number' => 'required|numeric|max_digits:4',
             'departure_city' => 'required|string|min:1|max:85',
             'arrival_city' => 'required|string|min:1|max:85',
-            'departure_time' => 'required|date_format:H:i:s',
-            'arrival_time' => 'required|date_format:H:i:s',
+            'departure_time' => 'required|date_format:Y-m-d H:i:s',
+            'arrival_time' => 'required|date_format:Y-m-d H:i:s',
         ]);
 
         $flight->update($data);
