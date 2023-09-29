@@ -17,16 +17,5 @@ class FlightSeeder extends Seeder
         Flight::factory()
             ->count(50)
             ->create();
-            
-           // Create passengers and distribute them among flights
-        $passengerCount = 1000;
-        $flights = Flight::all();
-
-        while ($passengerCount > 0) {
-            $flight = $flights->random();
-            $passengerCount--;
-
-            Passenger::factory()->create(['flight_id' => $flight->id]);
-        }
     }
 }

@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Flight extends Model
 {
@@ -20,8 +20,8 @@ class Flight extends Model
     /**
      * Get the passengers for the flight.
      */
-    public function passengers(): HasMany
+    public function passengers(): BelongsToMany
     {
-        return $this->hasMany(Passenger::class);
+        return $this->belongsToMany(Passenger::class);
     }
 }

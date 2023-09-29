@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Passenger;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 
@@ -16,9 +17,10 @@ class PassengerController extends Controller
     {
 
         $passengers = QueryBuilder::for(Passenger::class)
-            ->allowedFilters(['first_name', 'last_name', 'email', 'date_of_birth', AllowedFilter::exact('id'), AllowedFilter::exact('flight_id')])
+            ->with('flights')
+            ->allowedFilters(['first_name', 'last_name', 'email', 'date_of_birth', AllowedFilter::exact('id')])
             ->defaultSort('-updated_at')
-            ->allowedSorts(['first_name', 'last_name', 'email', 'date_of_birth', 'flight_id', '-updated_at'])
+            ->allowedSorts(['first_name', 'last_name', 'email', 'date_of_birth', '-updated_at'])
             ->paginate($request->input('per_page', 100))
             ->appends($request->query());
 
@@ -38,7 +40,28 @@ class PassengerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:passengers,email|max:255',
+            'password' => 'required|string|min:8',
+            'date_of_birth' => 'required|date',
+            'passport_expiry_date' => 'required|date',
+        ]);
+
+        $data['password'] = bcrypt($data['password']);
+
+        $flights = json_decode($request->input('flights'));
+
+        $passenger = Passenger::create($data);
+
+        $passenger->flights()->sync($flights);
+
+        return response([
+            'success' => true, 
+            'passenger' => $passenger,
+            'flights' => $flights,
+        ]);
     }
 
     /**
@@ -46,7 +69,8 @@ class PassengerController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $passenger = Passenger::find($id);   
+        return response(['success' => true, 'passenger' => $passenger]);
     }
 
     /**
@@ -62,7 +86,31 @@ class PassengerController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $data = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:passengers,email|max:255',
+            'password' => 'required|string|min:8',
+            'date_of_birth' => 'required|date',
+            'passport_expiry_date' => 'required|date',
+        ]);
+
+        if (request()->has('password'))
+        $data['password'] = bcrypt($data['password']);
+
+        $passenger = Passenger::find($id);
+
+        $passenger->update($data);
+
+        $flights = json_decode($request->input('flights'));
+        
+        $passenger->flights()->sync($flights);
+        
+        return response([
+            'success' => true, 
+            'passenger' => $passenger,
+            'flights' => $flights,
+        ]);
     }
 
     /**
@@ -70,6 +118,8 @@ class PassengerController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $passenger = Passenger::find($id);
+        $passenger->delete();
+        return response(['passenger' => $passenger], Response::HTTP_NO_CONTENT);
     }
 }

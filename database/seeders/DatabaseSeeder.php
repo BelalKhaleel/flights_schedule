@@ -22,8 +22,23 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
         $this->call([
-            FlightSeeder::class,
             PassengerSeeder::class,
+            FlightSeeder::class,
         ]);
+
+        // Retrieve all passengers and flights
+        $passengers = Passenger::all();
+        $flights = Flight::all();
+
+        foreach ($passengers as $passenger) {
+            // Determine the number of flights to assign to the passenger (random between 1 and 5)
+            $flightCount = rand(1, 5);
+    
+            // Shuffle the flights and take a random set of flights
+            $randomFlights = $flights->shuffle()->take($flightCount);
+    
+            // Attach the passenger to the selected flights
+            $passenger->flights()->attach($randomFlights);
+        }
     }
 }

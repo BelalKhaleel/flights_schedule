@@ -16,7 +16,7 @@ class FlightController extends Controller
     {
 
         $flights = QueryBuilder::for(Flight::class)
-            ->with(['passengers'])
+            ->with('passengers')
             ->allowedFilters(['departure_city', 'arrival_city', 'departure_time', 'arrival_time', AllowedFilter::exact('id'), AllowedFilter::exact('flight_number')])
             ->defaultSort('-updated_at')
             ->allowedSorts(['flight_number', 'departure_city', 'arrival_city', 'departure_time', 'arrival_time', '-updated_at'])
