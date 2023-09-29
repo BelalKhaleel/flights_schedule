@@ -86,6 +86,8 @@ class PassengerController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $passenger = Passenger::find($id);
+
         $data = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -97,8 +99,6 @@ class PassengerController extends Controller
 
         if (request()->has('password'))
         $data['password'] = bcrypt($data['password']);
-
-        $passenger = Passenger::find($id);
 
         $passenger->update($data);
 

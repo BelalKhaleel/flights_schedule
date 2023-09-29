@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Flight;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 
@@ -39,7 +40,20 @@ class FlightController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'flight_number' => 'required|numeric|max_digits:4',
+            'departure_city' => 'required|string|min:1|max:85',
+            'arrival_city' => 'required|string|min:1|max:85',
+            'departure_time' => 'required|date_format:H:i:s',
+            'arrival_time' => 'required|date_format:H:i:s',
+        ]);
+
+        $flight = Flight::create($data);
+
+        return response([
+            'success' => true,
+            'flight' => $flight,
+        ]);
     }
 
     /**
@@ -70,7 +84,22 @@ class FlightController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $flight = Flight::find($id);
+
+        $data = $request->validate([
+            'flight_number' => 'required|numeric|max_digits:4',
+            'departure_city' => 'required|string|min:1|max:85',
+            'arrival_city' => 'required|string|min:1|max:85',
+            'departure_time' => 'required|date_format:H:i:s',
+            'arrival_time' => 'required|date_format:H:i:s',
+        ]);
+
+        $flight->update($data);
+
+        return response([
+            'success' => true,
+            'flight' => $flight,
+        ]);
     }
 
     /**
@@ -78,6 +107,8 @@ class FlightController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $flight = Flight::find($id);
+        $flight->delete();
+        return response(['flight' => $flight], Response::HTTP_NO_CONTENT);
     }
 }
