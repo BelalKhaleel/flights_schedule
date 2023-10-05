@@ -120,6 +120,6 @@ class PassengerController extends Controller
     {
         $passenger = Passenger::find($id);
         $passenger->delete();
-        return response(['passenger' => $passenger], Response::HTTP_NO_CONTENT);
+        return response()->json();
     }
 }

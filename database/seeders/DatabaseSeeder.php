@@ -22,8 +22,10 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
         $this->call([
+            UserSeeder::class,
             PassengerSeeder::class,
             FlightSeeder::class,
+            RoleAndPermissionSeeder::class,
         ]);
 
         // Retrieve all passengers and flights

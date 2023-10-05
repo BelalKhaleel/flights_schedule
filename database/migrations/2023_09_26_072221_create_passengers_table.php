@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('password');
             $table->date('date_of_birth');
             $table->date('passport_expiry_date');
-            $table->rememberToken();
+            $table->rememberToken()->nullable();
             $table->timestamps();
             $table->softDeletes($column = 'deleted_at', $precision = 0);
         });
