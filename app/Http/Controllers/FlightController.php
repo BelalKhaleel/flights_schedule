@@ -28,14 +28,6 @@ class FlightController extends Controller
     }
 
     /**
-     * Show the form for creating a new flight.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created flight in storage.
      */
     public function store(Request $request)
@@ -69,14 +61,6 @@ class FlightController extends Controller
 
         $flight->load('passengers');
         return response(['success' => true, 'flight' => $flight]);
-    }
-
-    /**
-     * Show the form for editing the specified flight.
-     */
-    public function edit(string $id)
-    {
-        //
     }
 
     /**

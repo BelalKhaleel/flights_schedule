@@ -28,14 +28,6 @@ class PassengerController extends Controller
     }
 
     /**
-     * Show the form for creating a new passenger.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created passenger in storage.
      */
     public function store(Request $request)
@@ -71,14 +63,6 @@ class PassengerController extends Controller
     {
         $passenger = Passenger::find($id);   
         return response(['success' => true, 'passenger' => $passenger]);
-    }
-
-    /**
-     * Show the form for editing the specified passenger.
-     */
-    public function edit(string $id)
-    {
-        //
     }
 
     /**

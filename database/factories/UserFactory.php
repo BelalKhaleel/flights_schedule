@@ -19,24 +19,15 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+            'name' => 'Bilal Khalil',
+            'email' => 'bilal_khalil@mail.com',
             'email_verified_at' => now(),
             'password' => bcrypt('12345678'), // password
+            'is_admin' => true,
             'remember_token' => Str::random(10),
         ];
     }
 
-    // public function admin()
-    // {
-    //     return $this->afterCreating(function ($user) {
-    //         // Assign the "admin" role to the user
-    //         $adminRole = Role::where('name', 'Admin')->first();
-    //         if ($adminRole) {
-    //             $user->assignRole($adminRole);
-    //         }
-    //     });
-    // }
     /**
      * Indicate that the model's email address should be unverified.
      */
