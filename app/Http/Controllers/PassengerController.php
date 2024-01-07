@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Passenger;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PassengerController extends Controller
 {
@@ -15,7 +15,6 @@ class PassengerController extends Controller
      */
     public function index(Request $request)
     {
-
         $passengers = QueryBuilder::for(Passenger::class)
             ->with('flights')
             ->allowedFilters(['first_name', 'last_name', 'email', 'date_of_birth', AllowedFilter::exact('id')])
@@ -100,9 +99,8 @@ class PassengerController extends Controller
     /**
      * Remove the specified passenger from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Passenger $passenger)
     {
-        $passenger = Passenger::find($id);
         $passenger->delete();
         return response()->json();
     }

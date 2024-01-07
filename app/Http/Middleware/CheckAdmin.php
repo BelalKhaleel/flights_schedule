@@ -18,11 +18,10 @@ class CheckAdmin
         $user = $request->user();
 
         if ($user && $user->is_admin) {
-            return $next($request); // User is an admin, allow access to the route
+            return $next($request);
         }
 
-        // User is not an admin, you can redirect, abort, or handle it as needed
-        return abort(403, 'Unauthorized'); // For example, return a 403 Forbidden response
+        return abort(403, 'Unauthorized');
 
     }
 }

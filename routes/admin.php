@@ -9,7 +9,7 @@ use App\Http\Controllers\UserController;
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
-Route::group(['middleware' => ['auth:sanctum', 'checkAdmin', 'role:Admin']], function () {
+Route::group(['middleware' => ['auth:sanctum']], function () {
   Route::apiResource('users', UserController::class);
   Route::apiResource('passengers', PassengerController::class);
   Route::apiResource('flights', FlightController::class);
