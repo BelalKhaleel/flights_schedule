@@ -51,25 +51,16 @@ class FlightController extends Controller
     /**
      * Display the specified flight.
      */
-    public function show(string $flight_number)
+    public function show(Flight $flight)
     {
-        $flight = Flight::where('flight_number', $flight_number)->first();
-
-        if (!$flight) {
-            return response(['success' => false, 'message' => 'flight not found!', 404]);
-        }
-
-        $flight->load('passengers');
-        return response(['success' => true, 'flight' => $flight]);
+        return response(['success' => true, 'flight' => $flight->load('passengers')]);
     }
 
     /**
      * Update the specified flight in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Flight $flight)
     {
-        $flight = Flight::find($id);
-
         $data = $request->validate([
             'flight_number' => 'required|numeric|max_digits:4',
             'departure_city' => 'required|string|min:1|max:85',
@@ -89,9 +80,8 @@ class FlightController extends Controller
     /**
      * Remove the specified flight from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Flight $flight)
     {
-        $flight = Flight::find($id);
         $flight->delete();
         return response(['flight' => $flight], Response::HTTP_NO_CONTENT);
     }

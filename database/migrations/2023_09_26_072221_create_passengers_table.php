@@ -22,7 +22,6 @@ return new class extends Migration
             $table->date('passport_expiry_date');
             $table->rememberToken()->nullable();
             $table->timestamps();
-            $table->softDeletes($column = 'deleted_at', $precision = 0);
         });
     }
 

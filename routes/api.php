@@ -7,9 +7,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FlightController;
 use App\Http\Controllers\PassengerController;
 use App\Http\Controllers\UserController;
-use App\Models\Flight;
-use App\Models\Passenger;
-use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,14 +23,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware('role:Editor')->group(function () {
-    Route::get('api/flights', [FlightController::class, 'index']);
-    Route::get('api/flights/{id}', [FlightController::class, 'show']);
+Route::post('login', [AuthController::class, 'login']);
+Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
-    Route::get('api/passengers', [PassengerController::class, 'index']);
-    Route::get('api/passengers/{id}', [PassengerController::class, 'show']);
-    Route::post('api/passengers', [PassengerController::class, 'store']);
-    Route::post('api/passengers/{id}', [PassengerController::class, 'update']);
-    Route::delete('api/passengers/{id}', [PassengerController::class, 'destroy']);
+Route::group(['middleware' => ['auth:sanctum']], function () {
+  Route::apiResource('users', UserController::class);
+  Route::apiResource('passengers', PassengerController::class);
+  Route::apiResource('flights', FlightController::class);
 });
-

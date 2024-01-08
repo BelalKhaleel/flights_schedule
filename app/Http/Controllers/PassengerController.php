@@ -58,19 +58,16 @@ class PassengerController extends Controller
     /**
      * Display the specified passenger.
      */
-    public function show(string $id)
+    public function show(Passenger $passenger)
     {
-        $passenger = Passenger::find($id);   
         return response(['success' => true, 'passenger' => $passenger]);
     }
 
     /**
      * Update the specified passenger in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Passenger $passenger)
     {
-        $passenger = Passenger::find($id);
-
         $data = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',

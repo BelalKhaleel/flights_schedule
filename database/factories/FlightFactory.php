@@ -17,7 +17,7 @@ class FlightFactory extends Factory
      */
     public function definition(): array
     {
-        $departureTime = $this->faker->dateTimeBetween('-1 year', '+1 year');
+        $departureTime = $this->faker->dateTimeThisMonth();
         
          // Generate a random number of hours between 1 and 24 (adjust the range as needed)
          $randomHours = $this->faker->numberBetween(1, 19);

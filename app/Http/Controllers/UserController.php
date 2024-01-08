@@ -15,9 +15,9 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $users = QueryBuilder::for(User::class)
-            ->allowedFilters(['name', 'email', 'is_admin', AllowedFilter::exact('id')])
+            ->allowedFilters(['name', 'email', AllowedFilter::exact('id')])
             ->defaultSort('-updated_at')
-            ->allowedSorts(['name', 'email', 'is_admin', '-updated_at'])
+            ->allowedSorts(['name', 'email', '-updated_at'])
             ->paginate($request->input('per_page', 100))
             ->appends($request->query());
 
@@ -29,28 +29,15 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $data = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email|max:255',
+            'email' => 'required|email|unique:users,email|min:6|max:255',
             'password' => 'required|string|min:8',
-            'is_admin' => 'boolean',
         ]);
 
-        $password = bcrypt($request->input('password'));
+        $data['password'] = bcrypt($request->input('password'));
 
-        $is_admin = boolval($request->input('is_admin', false));
-
-        $user = User::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => $password,
-            'is_admin' => $is_admin,
-        ]);
-
-        // Assign the "Admin" role if 'is_admin' is true
-        if ($is_admin) {
-            $user->assignRole('Admin');
-        }
+        $user = User::create($data);
 
         return response([
             'success' => true,
@@ -62,29 +49,38 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(User $user)
     {
-        $user = User::find($id);
-        return response([
-            'success' => true,
-            'user' => $user,
-        ]);
+        return response([ 'success' => true, 'user' => $user, ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email|min:6|max:255',
+            'password' => 'required|string|min:8',
+        ]);
+
+        $data['password'] = bcrypt($request->input('password'));
+
+        $user->update($data);
+
+        return response([
+            'success' => true,
+            'message' => 'User updated successfully',
+            'user' => $user,
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
-        $user = User::find($id);
         $user->delete();
         return response()->json();
     }
