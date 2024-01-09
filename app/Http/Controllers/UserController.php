@@ -39,6 +39,10 @@ class UserController extends Controller
 
         $user = User::create($data);
 
+        $user->assignRole('user');
+
+        $user->load('roles.permissions');
+        
         return response([
             'success' => true,
             'message' => 'User created successfully',
@@ -51,7 +55,15 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return response([ 'success' => true, 'user' => $user, ]);
+        $is_admin = $user->hasRole('admin');
+
+        $permissions = $user->getPermissionsViaRoles();
+
+        return response([
+             'success' => true, 
+             'is_admin' => $is_admin,
+             'user' => $user, 
+        ]);
     }
 
     /**

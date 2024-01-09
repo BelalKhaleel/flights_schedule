@@ -14,36 +14,34 @@ class RoleAndPermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        Permission::create(['name' => 'get-users']);
-        Permission::create(['name' => 'create-users']);
-        Permission::create(['name' => 'edit-users']);
-        Permission::create(['name' => 'delete-users']);
+        $permissions = [
+            //user permissions
+            'view users',
+            'create users', 
+            'edit users', 
+            'delete users',
+            //passenger permissions
+            'view passengers', 
+            'create passengers', 
+            'edit passengers', 
+            'delete passengers',
+            //flight permissions
+            'view flights', 
+            'create flights', 
+            'edit flights', 
+            'delete flights',
+        ];
 
-        Permission::create(['name' => 'get-flights']);
-        Permission::create(['name' => 'create-flights']);
-        Permission::create(['name' => 'edit-flights']);
-        Permission::create(['name' => 'delete-flights']);
+        foreach ($permissions as $permission) {
+            Permission::create(['name' => $permission]);
+        }
 
-        $adminRole = Role::create(['name' => 'Admin']);
-        $editorRole = Role::create(['name' => 'Editor']);
-
-        $adminRole->givePermissionTo([
-            'get-users',
-            'create-users',
-            'edit-users',
-            'delete-users',
-            'get-flights',
-            'create-flights',
-            'edit-flights',
-            'delete-flights',
-        ]);
-
-        $editorRole->givePermissionTo([
-            'get-flights',
-            'create-users',
-            'get-users',
-            'edit-users',
-            'delete-users',
-        ]);
+        $adminRole = Role::create(['name' => 'admin']);
+        $adminRole->syncPermissions($permissions);
+        
+        $userRole = Role::create(['name' => 'user']);
+        $userRole->givePermissionTo('view users');
+        $userRole->givePermissionTo('view passengers');
+        $userRole->givePermissionTo('view flights');
     }
 }

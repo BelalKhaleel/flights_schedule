@@ -6,7 +6,6 @@ namespace Database\Seeders;
 
 use App\Models\Flight;
 use App\Models\Passenger;
-use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -17,10 +16,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            UserSeeder::class,
-            PassengerSeeder::class,
-            FlightSeeder::class,
             RoleAndPermissionSeeder::class,
+            UserSeeder::class,
+            FlightSeeder::class,
+            PassengerSeeder::class,
         ]);
 
         $passengers = Passenger::all();
